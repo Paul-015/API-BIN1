@@ -1,15 +1,14 @@
-const express = require('express');
-const userRouter = require("./routes/users");
+require('dotenv').config();
 
+const express = require('express');
 const app = express();
 
-app.get("/", (request, reponse, next) => {
-    reponse.send("Hello");
+const port = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello, world!');
 });
 
-app.use(userRouter);
-
-app.listen(process.env.PORT,() => 
-    console.log("Server est en écoute sur " + process.env.PORT)
-);
-
+app.listen(port, () => {
+  console.log(`Server est en écoute sur le port ${port}`);
+});
