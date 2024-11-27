@@ -1,20 +1,42 @@
-const User = require('../models/user');
+const users = [];
 
-exports.getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find();
-    res.status(200).json(users);
-  } catch (err) {
-    res.status(500).json({ error: 'echec pour récuperer le user' });
-  }
+
+module.exports = {
+  getAll: (req, res, next) => {
+    res.json(users);
+  },
+  create: (req, res, next) => {
+    const user = req.body;
+    user.id = Date.now();
+    users.push(user);
+
+    res.status(201).json(user);
+  },
+  getOne: (req, res, next) => {
+    const user = users.find(user => user.id === req.params.id);
+    if(user) {
+      res.json(user);
+    } else {
+      res.sendStatus(404);
+    }
+  },
+  update: (req, res, next) => {
+    const user = users.find((user) => user.id === req.params.id)
+    if (!user) return res.sendStatus(404);
+    Object.assign(user, req.body);
+    res.json(user);
+    
+  },
+  delete: (req, res, next) => {
+    const userIndex = users.findIndex((user) => user.id === req.params.id)
+    if(userIndex !== -1){
+      users.splice(userIndex, 1);
+      res.sendStatus(204);
+    }else {
+      res.sendStatus(404);
+    }
+    
+  },
+
 };
 
-exports.createUser = async (req, res) => {
-  try {
-    const newUser = new User(req.body);
-    const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
-  } catch (err) {
-    res.status(400).json({ error: 'echec pour créer le user' });
-  }
-};
