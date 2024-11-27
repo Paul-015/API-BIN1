@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) {
-    return res.status(401).json({ message: 'No token provided' });
+    return res.status(401).json({ message: 'pas de token ' });
   }
 
   try {
@@ -11,6 +11,6 @@ module.exports = (req, res, next) => {
     req.userData = decoded; 
     next();
   } catch (err) {
-    res.status(401).json({ message: 'Token invalid or expired' });
+    res.status(401).json({ message: 'Token invalide est expiree' });
   }
 };
